@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class UserUpdateDto {
     @Size(min = 3, max = 20, message = "El nombre de usuario debe tener entre 3 y 20 caracteres")
-    @Pattern(regexp = "^[A-Za-zÁÉÍÓÚáéíóúÑñ\\.\\s]+$", message = "El nombre de usuario solo puede contener letras, espacios y puntos")
+    @Pattern(regexp = "^[A-Za-z0-9_.-]+$", message = "El nombre de usuario solo puede contener letras, números, guion, guion bajo y puntos")
     private String username;
 
     @Size(min = 2, max = 50, message = "El nombre debe tener entre 2 y 50 caracteres")
