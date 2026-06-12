@@ -1,4 +1,3 @@
-
 INSERT INTO roles (name) VALUES
 ('ADMIN'),
 ('USER')
@@ -17,8 +16,3 @@ FROM roles r
 CROSS JOIN permissions p
 WHERE r.name = 'USER' AND p.method = 'GET'
 ON CONFLICT DO NOTHING;
-
-insert into role_permissions(permission_id, role_id) values (13, 2); --Permiso para rol user de actualizar contraseña
-
-select * from role_permissions;
-select * from permissions;

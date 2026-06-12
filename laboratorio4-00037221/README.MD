@@ -96,13 +96,13 @@ Este archivo realiza:
 
 - Inserción de roles `ADMIN` y `USER`.
 - Asignación de todos los permisos a `ADMIN`.
-- Asignación de permisos `GET` y el permiso de cambio de contraseña a `USER`.
+- Asignación de permisos `GET` a `USER`.
 
 ### Contenido principal
 
 - `INSERT INTO roles (name) VALUES ('ADMIN'), ('USER')`
 - `role_permissions` se llena con permisos existentes según método y rol.
-- Se agrega manualmente el permiso `id = 13` al rol `USER` para actualización de contraseña.
+- No se usan IDs fijos de permisos; las asignaciones se hacen por consulta.
 
 > Nota: `script.sql` asume que ya existen permisos registrados en la tabla `permissions`. El componente `SaveEndpoints` los crea automáticamente en el arranque.
 
@@ -116,7 +116,7 @@ Este archivo realiza:
 
 - `POST /api/auth/signup`
   - body: `{ "username", "name", "surname", "email", "password" }`
-  - crea usuario con rol por defecto `USER` y retorna token.
+  - crea usuario con rol por defecto `ADMIN` y retorna token.
 
 - `GET /api/auth/profile`
   - requiere token.
@@ -176,6 +176,25 @@ Este archivo realiza:
 
 - `PUT /api/permissions/{id}`
   - actualiza el `title` de un permiso.
+
+### Finanzas - Préstamos y Créditos
+
+- `GET /api/finanzas/prestamos`
+  - lista paginada de préstamos del usuario autenticado.
+
+- `POST /api/finanzas/prestamos`
+  - solicita un préstamo y genera automáticamente la tabla de amortización.
+  - body: `{ "capitalSolicitado", "tasaInteresAnual", "plazoMeses" }`
+
+- `GET /api/finanzas/prestamos/{id}/planes-pago`
+  - lista paginada de cuotas del préstamo autenticado.
+
+- `POST /api/finanzas/abonos`
+  - registra el pago de una cuota y calcula mora si aplica.
+  - body: `{ "planPagoId", "monto", "fechaPago" }`
+
+- `GET /api/finanzas/resumen-credito`
+  - devuelve el estado consolidado de deuda del usuario autenticado.
 
 ## 🧾 DTOs y respuestas
 
@@ -248,7 +267,5 @@ docker build -t spring-app .
 3. Ejecuta la app y prueba login/signup.
 4. Usa `POST /api/roles` para crear roles y asignar permisos.
 5. Ajusta `SecurityRules` si agregas rutas públicas o auth-only.
-
-
 
 
